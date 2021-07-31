@@ -149,6 +149,134 @@ namespace ControllerPage.Constant
     };
 
 
+    public enum Running_Time
+    {
+        [Description("1 min")]
+        min1 = 1000,
+        [Description("2 min")]
+        min2 = 2000,
+        [Description("3 min")]
+        min3 = 3000,
+        [Description("4 min")]
+        min4 = 4000,
+        [Description("5 min")]
+        min5 = 5000,
+        [Description("6 min")]
+        min6 = 6000,
+        [Description("7 min")]
+        min7 = 7000,
+        [Description("8 min")]
+        min8 = 8000,
+        [Description("9 min")]
+        min9 = 9000,
+        [Description("10 min")]
+        min10 = 10000,
+        [Description("11 min")]
+        min11 = 11000,
+        [Description("12 min")]
+        min12 = 12000,
+        [Description("13 min")]
+        min13 = 13000,
+        [Description("14 min")]
+        min14 = 14000,
+        [Description("15 min")]
+        min15 = 15000,
+        [Description("16 min")]
+        min16 = 16000,
+        [Description("17 min")]
+        min17 = 17000,
+        [Description("18 min")]
+        min18 = 18000,
+        [Description("19 min")]
+        min19 = 19000,
+        [Description("20 min")]
+        min20 = 20000,
+        [Description("21 min")]
+        min21 = 21000,
+        [Description("22 min")]
+        min22 = 22000,
+        [Description("23 min")]
+        min23 = 23000,
+        [Description("24 min")]
+        min24 = 24000,
+        [Description("25 min")]
+        min25 = 25000,
+        [Description("26 min")]
+        min26 = 26000,
+        [Description("27 min")]
+        min27 = 27000,
+        [Description("28 min")]
+        min28 = 28000,
+        [Description("29 min")]
+        min29 = 29000,
+        [Description("30 min")]
+        min30 = 30000,
+        [Description("31 min")]
+        min31 = 31000,
+        [Description("32 min")]
+        min32 = 32000,
+        [Description("33 min")]
+        min33 = 33000,
+        [Description("34 min")]
+        min34 = 34000,
+        [Description("35 min")]
+        min35 = 35000,
+        [Description("36 min")]
+        min36 = 36000,
+        [Description("37 min")]
+        min37 = 37000,
+        [Description("38 min")]
+        min38 = 38000,
+        [Description("39 min")]
+        min39 = 39000,
+        [Description("40 min")]
+        min40 = 40000,
+        [Description("41 min")]
+        min41 = 41000,
+        [Description("42 min")]
+        min42 = 42000,
+        [Description("43 min")]
+        min43 = 43000,
+        [Description("44 min")]
+        min44 = 44000,
+        [Description("45 min")]
+        min45 = 45000,
+        [Description("46 min")]
+        min46 = 46000,
+        [Description("47 min")]
+        min47 = 47000,
+        [Description("48 min")]
+        min48 = 48000,
+        [Description("49 min")]
+        min49 = 49000,
+        [Description("50 min")]
+        min50 = 50000,
+        [Description("51 min")]
+        min51 = 51000,
+        [Description("52 min")]
+        min52 = 52000,
+        [Description("53 min")]
+        min53 = 53000,
+        [Description("54 min")]
+        min54 = 54000,
+        [Description("55 min")]
+        min55 = 55000,
+        [Description("56 min")]
+        min56 = 56000,
+        [Description("57 min")]
+        min57 = 57000,
+        [Description("58 min")]
+        min58 = 58000,
+        [Description("59 min")]
+        min59 = 59000,
+        [Description("60 min")]
+        min60 = 60000
+
+
+    };
+
+
+
     public enum TypeOfMeasure_old
     {
         [Description("22094\r")]
@@ -254,8 +382,131 @@ namespace ControllerPage.Constant
         ThreeA = 3,
     };
 
+    public enum Error_Sensor_Controller_old2
+    {
+        [Description("Connecting cable is not properly connected. Please Turn of power PT 2700 and check sensor connection")]
+        error001,
+        [Description("Number of grains that were tested is less than two. Please reset with stop key")]
+        error010,
+        [Description("No grain feed for more than 5 minutes. Please reset with stop key")]
+        error011,
+        [Description("Temperature less than -20 celc. Please reset with stop key")]
+        error020,
+        [Description("Temperature more than 70 celc. Please reset with stop key")]
+        error021,
+        [Description("Abnormal data. Please reset with stop key")]
+        error030,
+        [Description("Abnormal memory. Please turn off and on PT 2700")]
+        error040,
+        [Description("Abnormal PU-359 circuits 1. Reset with Stop key")]
+        error101,
+        [Description("Abnormal PU-359 circuits 2. Reset with Stop key")]
+        error102,
+        [Description("Abnormal PU-359 circuits 3. Reset with Stop key")]
+        error103,
+        [Description("Motor Lock. Reset with Stop key")]
+        error104,
+    };
 
 
+    public enum Error_Sensor_Controller
+    {
+        /*
+        [Description("Connecting cable is not properly connected. Please Turn of power PT 2700 and check sensor connection")]
+        error001,
+        */
+        /* 
+         * 
+        [Description("Number of grains that were tested is less than two. Please reset with stop key")]
+        error010, ignore this
+        
+        [Description("No grain feed for more than 5 minutes. Please reset with stop key")]
+        error011, not via error message
+        [Description("Abnormal memory. Please turn off and on PT 2700")]
+        error040, not possible in comfile PI
 
+        [Description("Abnormal data. Please reset with stop key")]
+        error030, this is check sum not via 
+        
+        */
+
+        // Temp
+        [Description("Error 020 - Temperature less than -20 celc. Please reset with stop key")]
+        error1000, // 1000 ga mungkin penilaian 
+        [Description("Error 022 - Temperature more than 70 celc. Please reset with stop key")]
+        error1200, // 1200 ga mungkin nilai
+        [Description("Error 024 - Temperature more than 70 celc. Please reset with stop key")]
+        error1400, // 1400 ga mungkin nilai
+        [Description("Error 021 - Temperature more than 70 celc. Please reset with stop key")]
+        error1600, // 1699
+
+        [Description("Error 020 - Temperature less than -20 celc. Please reset with stop key")]
+        error020, // STX 020 ETX CheckSUM CR
+        [Description("Error 021 - Temperature more than 70 celc. Please reset with stop key")]
+        error021, // STX 070 ETX CheckSUM CR
+        
+        // Check Command
+        [Description("Error 101 - Abnormal PU-359 circuits 1. Reset with Stop key")]
+        error00091,
+        [Description("Error 102 - Abnormal PU-359 circuits 2. Reset with Stop key")]
+        error00092,
+        [Description("Error 103 - Abnormal PU-359 circuits 3. Reset with Stop key")]
+        error00093,
+        [Description("Error 104 - Reset with Stop key")]
+        error00094,
+    };
+
+    public enum Error_Sensor_Controller_old
+    {
+        [Description("Connecting cable is not properly connected. Please Turn of power PT 2700 and check sensor connection")]
+        Error001,
+        [Description("Number of grains that were tested is less than two. Please reset with stop key")]
+        Error010,
+        [Description("No grain feed for more than 5 minutes. Please reset with stop key")]
+        Error011,
+        [Description("Temperature less than -20 celc. Please reset with stop key")]
+        Error020,
+        [Description("Temperature more than 70 celc. Please reset with stop key")]
+        Error021,
+        [Description("Abnormal data. Please reset with stop key")]
+        Error030,
+        [Description("Abnormal memory. Please turn off and on PT 2700")]
+        Error040,
+        [Description("Abnormal PU-359 circuits 1. Reset with Stop key")]
+        Error101,
+        [Description("Abnormal PU-359 circuits 2. Reset with Stop key")]
+        Error102,
+        [Description("Abnormal PU-359 circuits 3. Reset with Stop key")]
+        Error103,
+        [Description("Motor Lock. Reset with Stop key")]
+        Error104,
+    };
+
+
+    public enum Error_Sensor_PC
+    {
+        [Description("Connecting cable is not properly connected or is broken")]
+        Error001,
+        [Description("At the start of automatic measurement for moisture, the number of grains that were tested in each of three measurements was less than two")]
+        Error010,
+        [Description("In automatic/manual measurement, there was no grain feed for more than five minutes")]
+        Error011,
+        [Description("The temperature of the temperature sensor shows less than -20 celc.")]
+        Error020,
+        [Description("The temperature of the temperature sensor shows more than 70 celc.")]
+        Error021,
+        [Description("Abnormal data.")]
+        Error030,
+        [Description("Abnormal memory.")]
+        Error040,
+        [Description("Abnormal PU-359 circuits 1.")]
+        Error101,
+        [Description("Abnormal PU-359 circuits 2.")]
+        Error102,
+        [Description("Abnormal PU-359 circuits 3.")]
+        Error103,
+        [Description("Motor Lock.")]
+        Error104,
+    };
 
 }

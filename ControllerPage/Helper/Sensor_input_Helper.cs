@@ -19,10 +19,15 @@ using System.Reflection;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
+using ControllerPage.Library;
+//using RaspberryIO;
 //using MySql.data.Entity;
 using System.Data;
 using System.Net;
 using System.Net.Sockets;
+using IronPython.Hosting;
+using Microsoft.Scripting.Hosting;
+
 
 namespace ControllerPage.Helper
 {
@@ -31,7 +36,8 @@ namespace ControllerPage.Helper
 
         public static string GetLocalIPAddress()
         {
-            /*
+           //return "192.168.0.2";
+
             var host = Dns.GetHostEntry(Dns.GetHostName());
             
             foreach (var ip in host.AddressList)
@@ -41,9 +47,24 @@ namespace ControllerPage.Helper
                     return ip.ToString();
                 }
             }
-            */
-            return "192.168.0.6";
+
+
+            
+         
             throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
+        public static List<String> get_List_Error_Code()
+        {
+            //List<string> Default_Error_code = Enum.GetValues(typeof(Error_Sensor_Controller)).Cast<Error_Sensor_Controller>().Select(v => v.ToString()).ToList();
+            List<String> List_Error_Code = new List<String> {  };
+            var Var_List_Error_code = Enum.GetValues(typeof(Error_Sensor_Controller)).Cast<Error_Sensor_Controller>().Select(v => v.ToString()).ToList()
+                .Select(s => s.Replace("error", "")).ToList();
+
+            foreach (string error_Code in Var_List_Error_code)
+            {
+                List_Error_Code.Add(error_Code);
+            }
+            return List_Error_Code;
         }
         public static void Command_Check(SerialPort mySerialPort)
         {
@@ -157,7 +178,7 @@ namespace ControllerPage.Helper
                 //Thread.Sleep(10);
             }
         }
-        public static List<string> Get_List_Time_Interval()
+        public static List<string> Get_List_Waiting_Time_Interval()
         {
             var attributes = typeof(Time_Interval).GetMembers()
                 .SelectMany(member => member.GetCustomAttributes(typeof(DescriptionAttribute), true).Cast<DescriptionAttribute>())
@@ -169,6 +190,20 @@ namespace ControllerPage.Helper
             return asList;
 
         }
+
+        public static List<string> Get_List_Running_Time()
+        {
+            var attributes = typeof(Running_Time).GetMembers()
+                .SelectMany(member => member.GetCustomAttributes(typeof(DescriptionAttribute), true).Cast<DescriptionAttribute>())
+                .ToList();
+
+            var result = attributes.Select(x => x.Description);
+            List<string> asList = attributes.Select(x => x.Description).ToList();
+
+            return asList;
+
+        }
+
         public static List<string> Get_List_Number_Grain()
         {
             var attributes = typeof(number_grain).GetMembers()
@@ -238,20 +273,10 @@ namespace ControllerPage.Helper
         //string myConnectionString = "server=localhost;database=testDB;uid=root;pwd=abc123;";
         public static void MySQL_ConnectDatabase()
         {
-            //string server = "Localhost_test";
-
-            //string server = "103.224.212.219";
-            //string server = GetLocalIPAddress();
-
             string server = GetLocalIPAddress();
-            //string server = "raspberrypi";
-
-            //string server = "Localhost via UNIX socket";
             MySqlConnection connection;
-            //string server = "localhost";
             string database = "sensor_database";
             string user = "root";
-            //string password = "admin";
             string password = "raspberry";
             string port = "3306";
             string sslM = "none";
@@ -259,25 +284,51 @@ namespace ControllerPage.Helper
             
             connectionString = String.Format("server={0};port={1};user id={2}; password={3}" +
                 "; database={4}; SslMode={5}", server, port, user, password, database, sslM);
-            
-            /*
-            connectionString = String.Format("server={0};port={1};user id={2};password={3}" +
-                "; database={4}", server, port, user, password, database);
-            */
 
             connection = new MySqlConnection(connectionString);
             
             try
             {
                 connection.Open();
-                //MessageBox.Show("successful connection");
                 connection.Close();
+                
             }
             catch (MySqlException ex)
             {
                 MessageBox.Show(ex.Message + connectionString);
             }
         }
+
+        public static bool Check_MySQL_Connect()
+        {
+            bool checkresult = false;
+            string server = GetLocalIPAddress();
+            MySqlConnection connection;
+            string database = "sensor_database";
+            string user = "root";
+            string password = "raspberry";
+            string port = "3306";
+            string sslM = "none";
+            string connectionString;
+
+            connectionString = String.Format("server={0};port={1};user id={2}; password={3}" +
+                "; database={4}; SslMode={5}", server, port, user, password, database, sslM);
+
+            connection = new MySqlConnection(connectionString);
+
+            try
+            {
+                connection.Open();
+                connection.Close();
+                checkresult = true;
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show(ex.Message + connectionString);
+            }
+            return checkresult;
+        }
+
 
         public static void MySQL_ConnectDatabase_test(string connection_string_input)
         {
@@ -417,14 +468,11 @@ namespace ControllerPage.Helper
             }
 
         }
-
-        public static int MySQL_Get_Parameter(string IPAddress_varinput, string product_varinput
-            , int total_interval_varinput, string time_interval_varinput, int number_perinterval_varinput, string Temperature_Var_varinput)
+        public static List<SQL_Data_Config> MySql_Get_DataConfig(string IP_Address_varinput)
         {
             //MySqlConnection connection;
             //string server = "localhost";
-            //string server = "localhost";
-            string server = GetLocalIPAddress() ;
+            //string server = "192.168.0.4";
             //string server = "192.168.0.6";
 
             string database = "sensor_database";
@@ -434,60 +482,44 @@ namespace ControllerPage.Helper
             string port = "3306";
             string sslM = "none";
             string connectionString;
+            connectionString = String.Format("server={0};port={1};user id={2}; password={3}; database={4}; SslMode={5}", IP_Address_varinput, port, user, password, database, sslM);
 
-            //connectionString = String.Format("server={0};port={1};user id={2}; password={3}" +
-            //    "; database={4}; SslMode={5}", server, port, user, password, database, sslM);
+            //Sql_Measure_Batch query_batch = new Sql_Measure_Batch();
 
+            List<SQL_Data_Config> List_Data_Config = new List<SQL_Data_Config> { };
 
-            connectionString = String.Format("server={0};port={1};user id={2}; password={3}; database={4}; SslMode={5}", server, port, user, password, database, sslM);
 
             using (var connection = new MySqlConnection(connectionString))
             {
-                MySqlCommand command = new MySqlCommand("Insert_Batch", connection);
+                MySqlCommand command = new MySqlCommand("Get_Parameter", connection);
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add(new MySqlParameter("IPAddress_var", IPAddress_varinput));
-                command.Parameters.Add(new MySqlParameter("Product_var", product_varinput));
-                command.Parameters.Add(new MySqlParameter("Total_Interval_var", total_interval_varinput));
-                command.Parameters.Add(new MySqlParameter("Time_Interval_var", time_interval_varinput));
-                command.Parameters.Add(new MySqlParameter("Number_Per_Interval_var", number_perinterval_varinput));
-                command.Parameters.Add(new MySqlParameter("Temperature_Var", Temperature_Var_varinput));
-                // Add parameters
-                command.Parameters.Add(new MySqlParameter("?Out_Result_Batch_ID", MySqlDbType.VarChar));
-                command.Parameters["?Out_Result_Batch_ID"].Direction = ParameterDirection.Output;
-
-
+                command.Parameters.Add(new MySqlParameter("Parameter_var", "0"));
                 command.Connection.Open();
-                var result = command.ExecuteNonQuery();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
 
-                //cmd.ExecuteNonQuery();
-                //int lastInsertID = Convert.ToInt32(command.Parameters["Result_Batch_ID"].Value);
-                //string str_batch = (string)command.Parameters["?Out_Result_Batch_ID"].Value;
+                        SQL_Data_Config data_Config = new SQL_Data_Config(1, "1", 1);
+                        data_Config.Config_Id = (Convert.ToInt32(reader["id"]));
+                        data_Config.Config_Param = reader["Parameter"].ToString();
+                        data_Config.Config_Value = double.Parse(reader["value"].ToString());
 
-                //int PG = (int)command.Parameters["?Out_Result_Batch_ID"].Value;
+                        List_Data_Config.Add(data_Config);
+                    }
 
-                //int lastInsertID = (int)command.Parameters["?Out_Result_Batch_ID"].Value;
-                //int lastInsertID = (int)command.Parameters["?Out_Result_Batch_ID"].Value;
-
-                //int lastInsertID = 0;
-                int lastInsertID = Int32.Parse((string)command.Parameters["?Out_Result_Batch_ID"].Value);
-                //int lastInsertID = Convert.ToInt32(cmd.Parameters["@fileid"].Value);
+                }
                 command.Connection.Close();
 
-                return lastInsertID;
+
+                
             }
 
+            return List_Data_Config;
         }
 
-
-        public static void MySQL_Update_Parameter(string IPAddress_varinput, string product_varinput
-            , int total_interval_varinput, string time_interval_varinput, int number_perinterval_varinput, string Temperature_Var_varinput)
+        public static void Update_DataConfig(string IP_Address_varinput, string parameter, string value)
         {
-            //MySqlConnection connection;
-            //string server = "localhost";
-            //string server = "localhost";
-            string server = GetLocalIPAddress();
-            //string server = "192.168.0.6";
-
             string database = "sensor_database";
             string user = "root";
             //string password = "admin";
@@ -495,56 +527,114 @@ namespace ControllerPage.Helper
             string port = "3306";
             string sslM = "none";
             string connectionString;
+            connectionString = String.Format("server={0};port={1};user id={2}; password={3}; database={4}; SslMode={5}", IP_Address_varinput, port, user, password, database, sslM);
 
-            //connectionString = String.Format("server={0};port={1};user id={2}; password={3}" +
-            //    "; database={4}; SslMode={5}", server, port, user, password, database, sslM);
+            //Sql_Measure_Batch query_batch = new Sql_Measure_Batch();
 
+            List<SQL_Data_Config> List_Data_Config = new List<SQL_Data_Config> { };
 
-            connectionString = String.Format("server={0};port={1};user id={2}; password={3}; database={4}; SslMode={5}", server, port, user, password, database, sslM);
 
             using (var connection = new MySqlConnection(connectionString))
             {
-                MySqlCommand command = new MySqlCommand("Insert_Batch", connection);
+                MySqlCommand command = new MySqlCommand("Update_Parameter", connection);
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add(new MySqlParameter("IPAddress_var", IPAddress_varinput));
-                command.Parameters.Add(new MySqlParameter("Product_var", product_varinput));
-                command.Parameters.Add(new MySqlParameter("Total_Interval_var", total_interval_varinput));
-                command.Parameters.Add(new MySqlParameter("Time_Interval_var", time_interval_varinput));
-                command.Parameters.Add(new MySqlParameter("Number_Per_Interval_var", number_perinterval_varinput));
-                command.Parameters.Add(new MySqlParameter("Temperature_Var", Temperature_Var_varinput));
-                // Add parameters
-                command.Parameters.Add(new MySqlParameter("?Out_Result_Batch_ID", MySqlDbType.VarChar));
-                command.Parameters["?Out_Result_Batch_ID"].Direction = ParameterDirection.Output;
-
+                command.Parameters.Add(new MySqlParameter("Parameter_var", parameter));
+                command.Parameters.Add(new MySqlParameter("Value_var", value));
 
                 command.Connection.Open();
-                var result = command.ExecuteNonQuery();
-
-                //cmd.ExecuteNonQuery();
-                //int lastInsertID = Convert.ToInt32(command.Parameters["Result_Batch_ID"].Value);
-                //string str_batch = (string)command.Parameters["?Out_Result_Batch_ID"].Value;
-
-                //int PG = (int)command.Parameters["?Out_Result_Batch_ID"].Value;
-
-                //int lastInsertID = (int)command.Parameters["?Out_Result_Batch_ID"].Value;
-                //int lastInsertID = (int)command.Parameters["?Out_Result_Batch_ID"].Value;
-
-                //int lastInsertID = 0;
-                int lastInsertID = Int32.Parse((string)command.Parameters["?Out_Result_Batch_ID"].Value);
-                //int lastInsertID = Convert.ToInt32(cmd.Parameters["@fileid"].Value);
-                command.Connection.Close();
+                command.ExecuteReader();
 
             }
 
         }
 
 
-        public void InsertSensorResult()
+        public static void Update_ErrorCode(string IP_Address_varinput, int Batch_ID, string Error_Code)
         {
+            string database = "sensor_database";
+            string user = "root";
+            //string password = "admin";
+            string password = "raspberry";
+            string port = "3306";
+            string sslM = "none";
+            string connectionString;
+            connectionString = String.Format("server={0};port={1};user id={2}; password={3}; database={4}; SslMode={5}", IP_Address_varinput, port, user, password, database, sslM);
 
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                MySqlCommand command = new MySqlCommand("Update_Error", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new MySqlParameter("Batch_id", Batch_ID));
+                command.Parameters.Add(new MySqlParameter("Error_Code", Error_Code));
+
+                command.Connection.Open();
+                command.ExecuteReader();
+
+            }
 
         }
 
 
+        public static void Update_FinishBatch(string IP_Address_varinput, int Batch_ID, string Error_Code)
+        {
+            string database = "sensor_database";
+            string user = "root";
+            //string password = "admin";
+            string password = "raspberry";
+            string port = "3306";
+            string sslM = "none";
+            string connectionString;
+            connectionString = String.Format("server={0};port={1};user id={2}; password={3}; database={4}; SslMode={5}", IP_Address_varinput, port, user, password, database, sslM);
+
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                MySqlCommand command = new MySqlCommand("Update_Finish_Batch", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new MySqlParameter("Batch_id", Batch_ID));
+
+                command.Connection.Open();
+                command.ExecuteReader();
+
+            }
+
+        }
+
+
+        public static void Callbeep()
+        {
+            /*
+            ScriptEngine engine = Python.CreateEngine();
+            engine.ExecuteFile(@"/home/pi/Desktop/Final/sound.py");
+            */
+            string appArgs = "";
+            string appPath = @"/home/pi/Desktop/Final/Sound.py";
+            Process proc = new Process();
+            //ProcessStartInfo si = new ProcessStartInfo(appPath, appArgs);
+            ProcessStartInfo si = new ProcessStartInfo(appPath);
+            si.FileName = "python";
+            si.Arguments = "/home/pi/Desktop/Final/Sound.py";
+            si.UseShellExecute = true;     // Required for UAC elevation.
+            proc.StartInfo = si;
+            proc.Start();
+            proc.WaitForExit();
+
+            /*
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.FileName = "/home/pi/Fio/to/python.exe";
+            start.Arguments = string.Format("{0} {1}", cmd, args);
+            start.UseShellExecute = false;
+            start.RedirectStandardOutput = true;
+            using (Process process = Process.Start(start))
+            {
+                using (StreamReader reader = process.StandardOutput)
+                {
+                    string result = reader.ReadToEnd();
+                    Console.Write(result);
+                }
+            }
+            */
+        }
+
+       
     }
 }
