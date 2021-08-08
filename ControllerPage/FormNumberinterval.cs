@@ -58,5 +58,10 @@ namespace ControllerPage
         {
 
         }
+
+        private void Combobox_NumInterval_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

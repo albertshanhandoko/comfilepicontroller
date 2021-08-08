@@ -163,6 +163,12 @@
     <Compile Include="FormBIASPassword.designer.cs">
       <DependentUpon>FormBIASPassword.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormIPSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormIPSet.Designer.cs">
+      <DependentUpon>FormIPSet.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormLanguage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -254,6 +260,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormBIASPassword.resx">
       <DependentUpon>FormBIASPassword.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormIPSet.resx">
+      <DependentUpon>FormIPSet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormLanguage.resx">
       <DependentUpon>FormLanguage.cs</DependentUpon>

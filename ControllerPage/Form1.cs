@@ -20,6 +20,7 @@ using System.IO;
 using System.Security.Permissions;
 using System.Numerics;
 using System.Globalization;
+using System.Net.Sockets;
 
 namespace ControllerPage
 {
@@ -92,6 +93,7 @@ namespace ControllerPage
         {
             InitializeComponent();
             data_initiation_input();
+            ButtonIPSet.Text = GetLocalIPAddress();
 
         }
 
@@ -628,7 +630,7 @@ namespace ControllerPage
 
                     if (check_Error(Result_Parsing) || check_5min_error(check_temp_5min_start))
                     {
-                        error_for_button();
+                        //error_for_button();
                     }
                     else
                     {
@@ -883,8 +885,7 @@ namespace ControllerPage
 
 
 
-        }
-     
+        }  
         private bool check_Error(string check_string)
         {
             bool_check_error = false;
@@ -989,7 +990,7 @@ namespace ControllerPage
            //if (Time_dif_check_5min.TotalMinutes > 1) // aslinya 300, sekrang tssting dlu
            {
                 MessageBox.Show(this, "Error 030 - no message during checking for 5 mins");
-                error_for_button();
+                //error_for_button();
                 checkcommand = false;
                 Console.WriteLine("Check Thread Aborted");
                 Timer_5min_StopCheck.Enabled = false;
@@ -1118,7 +1119,7 @@ namespace ControllerPage
                     //if (check_Error(Result_Parsing) || check_5min_error(start_5min_check))
                     if (check_Error(Result_Parsing) )
                     {
-                        error_for_button();
+                        //error_for_button();
                         checkcommand = false;
                     }
                     else if (Result_Parsing == "00090")
@@ -1127,7 +1128,7 @@ namespace ControllerPage
                         MessageBox.Show(this, "Connection Succeed");
                         checkcommand = false;
                         data_cleansing();
-                        Ready_To_Start_Button();
+                        //Ready_To_Start_Button();
                     }
                     else
                     {
@@ -1140,7 +1141,7 @@ namespace ControllerPage
             catch(TimeoutException ex)
             {
                 MessageBox.Show(this, "Error 030 - no message during checking for 5 mins");
-                error_for_button();
+                //error_for_button();
                 checkcommand = false;
                 //Console.WriteLine("Check Thread Aborted");
                 Console.WriteLine(ex.Message);
@@ -1903,11 +1904,11 @@ namespace ControllerPage
 
                             if (bool_check_error)
                             {
-                                error_for_button();
+                                //error_for_button();
                             }
                             else
                             {
-                                Ready_To_Start_Button();
+                                //Ready_To_Start_Button();
                             }
 
                             next_action_button(bool_check_error);
@@ -2366,6 +2367,70 @@ namespace ControllerPage
                 Console.WriteLine(ex.Message);
                 //  Block of code to handle errors
             }
+        }
+
+        private void changeip_Click(object sender, EventArgs e)
+        {
+            var existing_ip = textBox_sensornumber.Text;
+            var setting_ip = ipaddressset.Value;
+            ProcessStartInfo procStartInfo = new ProcessStartInfo("/usr/bin/sudo", "/bin/sed -i 's/static ip_address=192.168.0."+ existing_ip + "/static ip_address=192.168.0."+ setting_ip + "/' /etc/dhcpcd.conf");
+            procStartInfo.RedirectStandardOutput = true;
+            procStartInfo.UseShellExecute = false;
+            procStartInfo.CreateNoWindow = true;
+
+            System.Diagnostics.Process proc = new System.Diagnostics.Process();
+            proc.StartInfo = procStartInfo;
+            proc.Start();
+
+            ProcessStartInfo procStartInfo2 = new ProcessStartInfo("/usr/bin/sudo", "service dhcpcd restart");
+            procStartInfo2.RedirectStandardOutput = true;
+            procStartInfo2.UseShellExecute = false;
+            procStartInfo2.CreateNoWindow = true;
+
+            System.Diagnostics.Process proc2 = new System.Diagnostics.Process();
+            proc2.StartInfo = procStartInfo2;
+            proc2.Start();
+            MessageBox.Show("Change Sensor Number Successfull, System will reboot");
+
+            ProcessStartInfo procStartInfo3 = new ProcessStartInfo("/usr/bin/sudo", "reboot");
+            procStartInfo3.RedirectStandardOutput = true;
+            procStartInfo3.UseShellExecute = false;
+            procStartInfo3.CreateNoWindow = true;
+
+            System.Diagnostics.Process proc3 = new System.Diagnostics.Process();
+            proc3.StartInfo = procStartInfo3;
+            proc3.Start();
+        }
+
+        private void textBox_sensornumber_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString().Substring(ip.ToString().Length - 2).Replace(".", string.Empty);
+                }
+            }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            using (var form = new FormIPSet())
+            {
+                var result = form.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    ButtonIPSet.Text = FormIPSet.combobox_selectedItem_ipsetting;
+                }
+            }
+
         }
     }
 }
