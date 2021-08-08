@@ -53,6 +53,24 @@ namespace ControllerPage
                 proc.StartInfo = procStartInfo;
                 proc.Start();
 
+                ProcessStartInfo procStartInfo4 = new ProcessStartInfo("/usr/bin/sudo", "/bin/sed -i 's/bind-address = 192.168.0." + existing_ip + "/bind-address = 192.168.0." + setting_ip + "/' /etc/mysql/mariadb.cnf");
+                procStartInfo4.RedirectStandardOutput = true;
+                procStartInfo4.UseShellExecute = false;
+                procStartInfo4.CreateNoWindow = true;
+
+                System.Diagnostics.Process proc4 = new System.Diagnostics.Process();
+                proc4.StartInfo = procStartInfo4;
+                proc4.Start();
+
+                ProcessStartInfo procStartInfo5 = new ProcessStartInfo("/usr/bin/sudo", "/bin/sed -i 's/bind-address = 192.168.0." + existing_ip + "/bind-address = 192.168.0." + setting_ip + "/' /etc/mysql/my.cnf");
+                procStartInfo5.RedirectStandardOutput = true;
+                procStartInfo5.UseShellExecute = false;
+                procStartInfo5.CreateNoWindow = true;
+
+                System.Diagnostics.Process proc5 = new System.Diagnostics.Process();
+                proc5.StartInfo = procStartInfo5;
+                proc5.Start();
+
                 ProcessStartInfo procStartInfo2 = new ProcessStartInfo("/usr/bin/sudo", "service dhcpcd restart");
                 procStartInfo2.RedirectStandardOutput = true;
                 procStartInfo2.UseShellExecute = false;
@@ -61,7 +79,6 @@ namespace ControllerPage
                 System.Diagnostics.Process proc2 = new System.Diagnostics.Process();
                 proc2.StartInfo = procStartInfo2;
                 proc2.Start();
-                MessageBox.Show("Change Sensor Number Successfull, System will reboot");
 
                 ProcessStartInfo procStartInfo3 = new ProcessStartInfo("/usr/bin/sudo", "reboot");
                 procStartInfo3.RedirectStandardOutput = true;

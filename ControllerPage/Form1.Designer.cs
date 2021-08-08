@@ -58,7 +58,6 @@ namespace ControllerPage
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.Textbox_Forever = new System.Windows.Forms.TextBox();
-            this.ipaddressset = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox10 = new System.Windows.Forms.TextBox();
             this.textBox14 = new System.Windows.Forms.TextBox();
@@ -67,10 +66,11 @@ namespace ControllerPage
             this.Curr_Kernel_TextBox = new System.Windows.Forms.TextBox();
             this.Current_Avg_TextBox = new System.Windows.Forms.TextBox();
             this.Btn_Start = new System.Windows.Forms.Button();
-            this.textBox_sensornumber = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.changeip = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.textBox_sensornumber = new System.Windows.Forms.TextBox();
+            this.ipaddressset = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ipaddressset)).BeginInit();
@@ -307,6 +307,7 @@ namespace ControllerPage
             // Btn_Stop
             // 
             this.Btn_Stop.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.Btn_Stop.BackColor = System.Drawing.Color.Green;
             this.tableLayoutPanel1.SetColumnSpan(this.Btn_Stop, 4);
             this.Btn_Stop.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Btn_Stop.Location = new System.Drawing.Point(442, 219);
@@ -315,7 +316,7 @@ namespace ControllerPage
             this.Btn_Stop.Size = new System.Drawing.Size(172, 66);
             this.Btn_Stop.TabIndex = 29;
             this.Btn_Stop.Text = "STOP";
-            this.Btn_Stop.UseVisualStyleBackColor = true;
+            this.Btn_Stop.UseVisualStyleBackColor = false;
             this.Btn_Stop.Click += new System.EventHandler(this.Btn_Stop_Click);
             // 
             // label2
@@ -381,7 +382,7 @@ namespace ControllerPage
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(3, 195);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(0, 25);
+            this.comboBox1.Size = new System.Drawing.Size(0, 24);
             this.comboBox1.TabIndex = 38;
             this.comboBox1.Text = "--Choose Option--";
             // 
@@ -535,14 +536,6 @@ namespace ControllerPage
             this.Textbox_Forever.TabIndex = 57;
             this.Textbox_Forever.Visible = false;
             // 
-            // ipaddressset
-            // 
-            this.ipaddressset.Location = new System.Drawing.Point(135, 123);
-            this.ipaddressset.Name = "ipaddressset";
-            this.ipaddressset.Size = new System.Drawing.Size(39, 20);
-            this.ipaddressset.TabIndex = 60;
-            this.ipaddressset.Visible = false;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -636,6 +629,7 @@ namespace ControllerPage
             // Btn_Start
             // 
             this.Btn_Start.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.Btn_Start.BackColor = System.Drawing.Color.Red;
             this.tableLayoutPanel1.SetColumnSpan(this.Btn_Start, 4);
             this.Btn_Start.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Btn_Start.Location = new System.Drawing.Point(442, 123);
@@ -644,24 +638,8 @@ namespace ControllerPage
             this.Btn_Start.Size = new System.Drawing.Size(171, 66);
             this.Btn_Start.TabIndex = 28;
             this.Btn_Start.Text = "START";
-            this.Btn_Start.UseVisualStyleBackColor = true;
+            this.Btn_Start.UseVisualStyleBackColor = false;
             this.Btn_Start.Click += new System.EventHandler(this.button_start_Click);
-            // 
-            // textBox_sensornumber
-            // 
-            this.textBox_sensornumber.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.textBox_sensornumber.BackColor = System.Drawing.SystemColors.Control;
-            this.textBox_sensornumber.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox_sensornumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_sensornumber.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.textBox_sensornumber.Location = new System.Drawing.Point(19, 124);
-            this.textBox_sensornumber.Name = "textBox_sensornumber";
-            this.textBox_sensornumber.Size = new System.Drawing.Size(44, 19);
-            this.textBox_sensornumber.TabIndex = 58;
-            this.textBox_sensornumber.Text = "2";
-            this.textBox_sensornumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.textBox_sensornumber.Visible = false;
-            this.textBox_sensornumber.TextChanged += new System.EventHandler(this.textBox_sensornumber_TextChanged);
             // 
             // button1
             // 
@@ -696,6 +674,30 @@ namespace ControllerPage
             this.label3.Size = new System.Drawing.Size(61, 16);
             this.label3.TabIndex = 61;
             this.label3.Text = "COM Set";
+            // 
+            // textBox_sensornumber
+            // 
+            this.textBox_sensornumber.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.textBox_sensornumber.BackColor = System.Drawing.SystemColors.Control;
+            this.textBox_sensornumber.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox_sensornumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_sensornumber.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.textBox_sensornumber.Location = new System.Drawing.Point(19, 124);
+            this.textBox_sensornumber.Name = "textBox_sensornumber";
+            this.textBox_sensornumber.Size = new System.Drawing.Size(44, 19);
+            this.textBox_sensornumber.TabIndex = 58;
+            this.textBox_sensornumber.Text = "2";
+            this.textBox_sensornumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.textBox_sensornumber.Visible = false;
+            this.textBox_sensornumber.TextChanged += new System.EventHandler(this.textBox_sensornumber_TextChanged);
+            // 
+            // ipaddressset
+            // 
+            this.ipaddressset.Location = new System.Drawing.Point(135, 123);
+            this.ipaddressset.Name = "ipaddressset";
+            this.ipaddressset.Size = new System.Drawing.Size(39, 20);
+            this.ipaddressset.TabIndex = 60;
+            this.ipaddressset.Visible = false;
             // 
             // label4
             // 
